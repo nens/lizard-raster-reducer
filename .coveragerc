@@ -1,0 +1,11 @@
+[run]
+source = lizard_raster_reducer
+
+[report]
+show_missing = true
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml
