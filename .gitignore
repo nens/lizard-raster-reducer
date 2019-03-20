@@ -38,3 +38,4 @@ lizard_cache/
 reducer_results/
 reducer_options.yml
 Pipfile.lock
+*.pickle
