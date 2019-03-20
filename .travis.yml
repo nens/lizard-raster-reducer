@@ -1,6 +1,8 @@
 language: python
 python:
   - 3.6
+before_install:
+  - openssl aes-256-cbc -K $encrypted_bd0c72cd4f20_key -iv $encrypted_bd0c72cd4f20_iv -in credentials.yml.enc -out credentials.yml -d
 install:
   - pip install pipenv
   - PIPENV_IGNORE_VIRTUALENVS=1 pipenv install --dev
