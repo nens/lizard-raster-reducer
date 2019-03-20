@@ -21,15 +21,18 @@ The output format can be specified to be CSV, JSON or HTML.
 Usage
 ------------
 
-1. Set options: rename options_template.yml to options.yml and specify options (template provides explanation).
+0. First use: Run the code 2 times: pipenv run run-lizard-raster-reducer.
+This will create .yml configuration files from template .yml files.
 
-2. Set credentials: rename localsecret_template.py to localsecret.py and specify Lizard credentials
+1. Specify reducer options in reducer_options.yml.
+
+2. Specify Lizard credentials in credentials.yml
 
 3. Review optional arguments to pass: pipenv run run-lizard-raster-reducer -h
 
 4. Run the code: pipenv run run-lizard-raster-reducer
 
-5. Find result(s) in ./reducer_results
+5. Find result(s) in sub-folder /reducer_results
 
 
 Installation
@@ -76,32 +79,7 @@ in the pull requests. There's also `coverage reporting
 coveralls.io (once it has been set up).
 
 If you need a new dependency (like `requests`), add it in `setup.py` in
-`install_requires`. Afterwards, run install again to actuall install your
+`install_requires`. Afterwards, run install again to actually install your
 dependency::
 
   $ pipenv install --dev
-
-
-Steps to do after generating with cookiecutter
-----------------------------------------------
-
-- Add a new project on https://github.com/nens/ with the same name. Set
-  visibility to "public" and do not generate a license or readme.
-
-  Note: "public" means "don't put customer data or sample data with real
-  persons' addresses on github"!
-
-- Follow the steps you then see (from "git init" to "git push origin master")
-  and your code will be online.
-
-- Go to
-  https://github.com/nens/lizard-raster-reducer/settings/collaboration
-  and add the teams with write access (you might have to ask someone with
-  admin rights to do it).
-
-- Update this readme. Use `.rst
-  <http://www.sphinx-doc.org/en/stable/rest.html>`_ as the format.
-
-- Ask Reinout to configure travis and coveralls.
-
-- Remove this section as you've done it all :-)

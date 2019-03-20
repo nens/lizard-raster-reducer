@@ -28,7 +28,7 @@ def test_set_headers():
 
 
 def test_raster_collection():
-    with open("lizard_raster_reducer/tests/reducer_options.yml", "r") as ymlfile:
+    with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     raster_collection = rasters.RasterCollection(
         LIZARD_URL,
@@ -50,7 +50,7 @@ def test_raster_collection():
 
 
 def test_region_collection():
-    with open("lizard_raster_reducer/tests/reducer_options.yml", "r") as ymlfile:
+    with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     region_type = reducer_options["region_hierarchy"][-1][0]
     bounding_box = [
@@ -75,7 +75,7 @@ def test_region_collection():
 
 
 def test_reducer():
-    with open("lizard_raster_reducer/tests/reducer_options.yml", "r") as ymlfile:
+    with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     region_type = reducer_options["region_hierarchy"][-1][0]
     raster_collection_file = (
