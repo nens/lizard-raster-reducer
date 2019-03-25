@@ -21,8 +21,7 @@ The output format can be specified to be CSV, JSON or HTML.
 Usage
 ------------
 
-0. First use: Run the code 2 times: pipenv run run-lizard-raster-reducer.
-This will create .yml configuration files from template .yml files.
+0. First use, run: pipenv run run-lizard-raster-reducer. This will create .yml config files from templates.
 
 1. Specify reducer options in reducer_options.yml.
 

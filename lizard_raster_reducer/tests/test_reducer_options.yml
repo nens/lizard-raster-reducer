@@ -2,8 +2,8 @@
 # The list elements can be raster uuids, or search queries (the best match will be used).
 # The first list element is used as scope for the spatial extent and temporal behaviour.
 raster_layers:
-    - AHN2 WSS
-    - landgebruik
+    - waterdepth temporal
+    - land 
 # 2. List region hierarchy.
 # This will reduce the rasters according to the indicated hierarchy.
 # The last level in the hierarchy is used for the result(s).

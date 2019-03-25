@@ -61,26 +61,27 @@ def get_json_objects_async(urls):
     return url_json_dicts
 
 
-def select_from_list(itemlist, help_text="Which item (enter_number)?"):
-    """select item from list of items, based on user input"""
-    index_number = 0
-    numbered_itemlist = []
-    for counter, item in enumerate(itemlist):
-        numbered_item = "{}: {} ".format(counter + 1, item)
-        numbered_itemlist.append(numbered_item)
-    print("\n".join([item for item in numbered_itemlist]))
-    false_input = True
-    while false_input:
-        try:
-            item_number = input("{}\n".format(help_text))
-            while not item_number.isnumeric():
-                item_number = input("{}\n".format(help_text))
-            index_number = int(item_number) - 1
-            selected_item = itemlist[index_number]
-            false_input = False
-        except:
-            false_input = True
-    return selected_item, index_number
+# TODO find out how to mimic user input for test function
+# def select_from_list(item_list, help_text="Which item (enter_number)?"):
+#     """select item from list of items, based on user input"""
+#     index_number = 0
+#     numbered_item_list = []
+#     for counter, item in enumerate(item_list):
+#         numbered_item = f"{counter + 1}: {item} "
+#         numbered_item_list.append(numbered_item)
+#     print("\n".join([item for item in numbered_item_list]))
+#     false_input = True
+#     while false_input:
+#         try:
+#             item_number = input(f"{help_text}\n")
+#             while not item_number.isnumeric():
+#                 item_number = input(f"{help_text}\n")
+#             index_number = int(item_number) - 1
+#             selected_item = item_list[index_number]
+#             false_input = False
+#         except:
+#             false_input = True
+#     return selected_item, index_number
 
 
 def unpickle(file):
@@ -91,9 +92,9 @@ def unpickle(file):
         return None
 
 
-def flatten(items, seqtypes=(list, tuple)):
+def flatten(items, seq_types=(list, tuple)):
     """convert nested list to flat list"""
     for c, item in enumerate(items):
-        while c < len(items) and isinstance(items[c], seqtypes):
+        while c < len(items) and isinstance(items[c], seq_types):
             items[c : c + 1] = items[c]
     return items

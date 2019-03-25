@@ -25,16 +25,16 @@ class RasterAggregate:
         colormap = raster["colormap"]
         if colormap["type"] == "DiscreteColormap":
             for color in colormap["data"]:
-                class_label = "{}_{}".format(color["label"], uuid_short)
+                label = color["label"]
+                class_label = f"{label}_{uuid_short}"
                 data[class_label] = 0
         else:  # GradientColormap
             observation_type = raster["observation_type"]
-            parameter_unit = "{} ({})".format(
-                observation_type["parameter"], observation_type["unit"]
-            )
-            data_label = "{} {}_{}".format(
-                raster["name"], parameter_unit.lower(), uuid_short
-            )
+            parameter = observation_type["parameter"]
+            unit = observation_type["unit"]
+            raster_name = raster["name"]
+            parameter_unit = f"{parameter} ({unit})"
+            data_label = f"{raster_name} {parameter_unit}_{uuid_short}"
             data[data_label] = 0
         raster_attributes["data_format"] = data
         return raster_attributes
@@ -45,7 +45,7 @@ class RasterAggregate:
         if "type_nr" in region:
             for region_type_name, type_nr in self.reducer_hierarchy.items():
                 if region["type_nr"] == type_nr:
-                    type_name = "Region {}".format(region_type_name)
+                    type_name = f"Region {region_type_name}"
                     region_attributes[type_name] = region["name"]
             if "regional_context" in region:
                 regional_context = region["regional_context"]
@@ -55,12 +55,10 @@ class RasterAggregate:
                         for context_type, context_region in regional_context.items():
                             if context_type == type_nr:
                                 if len(regional_context.items()) == 1:
-                                    type_name = "Region context {}".format(
-                                        region_type_name
-                                    )
+                                    type_name = f"Region context {region_type_name}"
                                 else:
-                                    type_name = "Region context ({}) {}".format(
-                                        level, region_type_name
+                                    type_name = (
+                                        f"Region context ({level}) {region_type_name}"
                                     )
                                 region_attributes[type_name] = context_region["name"]
                                 level += 1
@@ -105,7 +103,7 @@ class Reducer:
     def fetch_raster_aggregate(self, region, raster, date):
         """fetch raster aggregate for one region, raster and date"""
         params = self.aggregation_params(region, raster, date)
-        url = parameterised_url("{}raster-aggregates/".format(self.LIZARD_URL), params)
+        url = parameterised_url(f"{self.LIZARD_URL}raster-aggregates/", params)
         return url
 
     def fetch_region_aggregates(self, region, raster):
@@ -180,7 +178,8 @@ class Reducer:
                         if "counts" in url and counts_data:
                             for elem in data:
                                 if "label" in elem:
-                                    label = "{}_{}".format(elem["label"], uuid_short)
+                                    elem_label = elem["label"]
+                                    label = f"{elem_label}_{uuid_short}"
                                     portion = elem["data"] / elem["total"]
                                 else:
                                     elem["label"] = ""
@@ -216,5 +215,4 @@ class Reducer:
         raster_aggregates = get_json_objects_async(aggregate_urls)
 
         aggregates = self.fill_aggregates_form(reducer_aggregates, raster_aggregates)
-
         return aggregates

@@ -8,8 +8,7 @@ import pickle
 from datetime import datetime as dt
 from lizard_raster_reducer.fetching import (
     request_json_from_url,
-    select_from_list,
-    unpickle,
+    unpickle,  # select_from_list,
 )
 
 logger = logging.getLogger(__name__)
@@ -36,13 +35,13 @@ class RasterCollection:
         A layer can point to a uuid or it can be a search query"""
         # check if a UUID is provided
         try:
-            raster_url = "{}rasters/{}/".format(self.LIZARD_URL, layer)
+            raster_url = f"{self.LIZARD_URL}rasters/{layer}/"
             raster_json = request_json_from_url(raster_url)
             return raster_json
         except:
             pass
         # check if a valid search query is provided
-        search_url = "{}search/".format(self.LIZARD_URL)
+        search_url = f"{self.LIZARD_URL}search/"
         params = {"q": layer, "type": "rasterstore"}
         raster_search = request_json_from_url(url=search_url, params=params)
         count = raster_search["count"]
@@ -53,15 +52,16 @@ class RasterCollection:
         raster_search_result = raster_search["results"]
         if first_result or count == 1:
             raster_url = raster_search_result[0]["entity_url"]
-        else:
-            raster_short_list = []
-            raster_urls = [i["entity_url"] for i in raster_search_result]
-            for raster in raster_search_result:
-                name_url = "{} (url: {})".format(raster["title"], raster["entity_url"])
-                raster_short_list.append(name_url)
-            help = "Query: {} \nWhich item (enter_number)?".format(layer)
-            _, number = select_from_list(raster_short_list, help)
-            raster_url = raster_urls[number]
+        # TODO find out how to mimic user input for test function
+        # else:
+        #     raster_short_list = []
+        #     raster_urls = [i["entity_url"] for i in raster_search_result]
+        #     for raster in raster_search_result:
+        #         name_url = f"{raster["title"]} (url: {raster["entity_url"]})"
+        #         raster_short_list.append(name_url)
+        #     help = f"Query: {layer} \nWhich item (enter_number)?"
+        #     _, number = select_from_list(raster_short_list, help)
+        #     raster_url = raster_urls[number]
 
         raster_json = request_json_from_url(raster_url)
         return raster_json
@@ -86,7 +86,7 @@ class RasterCollection:
         first_ms = int(raster["first_value_timestamp"])
         last_ms = int(raster["last_value_timestamp"])
         if self.temporal_options["custom_interval"]:
-            interval_ms = self.temporal_options["interval_days"] * 3600000 * 24
+            interval_ms = self.temporal_options["interval_days"] * 3_600_000 * 24
         else:
             interval_ms = int(raster["frequency"])
         while first_ms < last_ms:
@@ -120,9 +120,6 @@ class RasterCollection:
     def get_discrete_colormap(self, definition, hex_colors, reducer_colormap):
         """return the discrete colormap definition for one raster"""
         labels = next(iter(definition["labels"].values()))
-        # if not -1 in [label[0] for label in labels]:
-        #     labels.insert(0, [-1, "other"])
-        #     hex_colors[-1] = "#ffffff"
         reducer_classes = []
         for label in labels:
             value, name = label
@@ -145,8 +142,8 @@ class RasterCollection:
             raster["options"] = {"styles": styles}
         styles_split = styles.split(":")
         name = styles_split[0]
-        url = "{}colormaps/{}/".format(self.LIZARD_URL, name)
-        file = "lizard_cache/colormaps/colormap_{}.pickle".format(name)
+        url = f"{self.LIZARD_URL}colormaps/{name}/"
+        file = f"lizard_cache/colormaps/colormap_{name}.pickle"
         if check_local:
             colormap = unpickle(file)
         else:
@@ -155,22 +152,24 @@ class RasterCollection:
             colormap = request_json_from_url(url)
             pickle.dump(colormap, open(file, "wb"))
         definition = colormap["definition"]
-        type = definition["type"]
+        colormap_type = definition["type"]
         data = definition["data"]
+        if "invalid" in definition:
+            data.insert(0, [-1, definition["invalid"]])
         hex_colors = {}
         for elem in data:
             value, rgba = elem
             r, g, b, a = rgba
-            hex_color = "#{:02x}{:02x}{:02x}".format(r, g, b)
-            # hex_color_alpha = '#{:02x}{:02x}{:02x}{:02x}'.format(r, g, b, a)
+            hex_color = f"#{r:02x}{g:02x}{b:02x}"
+            # hex_color_alpha = f"#{r:02x}{g:02x}{b:02x}{a:02x}"
             hex_colors[value] = hex_color
 
-        reducer_colormap = {"type": type, "name": name}
-        if type == "GradientColormap":
+        reducer_colormap = {"type": colormap_type, "name": name}
+        if colormap_type == "GradientColormap":
             return self.get_gradient_colormap(
                 hex_colors, styles_split, reducer_colormap
             )
-        else:  # type == "DiscreteColormap":
+        else:  # colormap_type == "DiscreteColormap":
             return self.get_discrete_colormap(definition, hex_colors, reducer_colormap)
 
     def get_reducer_dates(self, scope_raster):

@@ -34,16 +34,49 @@ def get_parser():
         help="Verbose output",
     )
     parser.add_argument(
+        "-c",
+        "--cache",
+        action="store_true",
+        default=True,
+        help="store lizard data in local cache",
+    )
+    parser.add_argument(
         "-l",
         "--limit",
         type=int,
-        help="limit the amount of regions in the output" "defaults to no limit",
+        default=None,
+        help="limit the amount of regions in the output. Defaults to no limit",
     )
-    # TODO add argument to use lizard cache
     return parser
 
 
-def reduce_rasters(reducer_options, region_limit):
+def set_local_config():
+    os.makedirs("reducer_results", exist_ok=True)
+    os.makedirs("lizard_cache/colormaps", exist_ok=True)
+    os.makedirs("lizard_cache/regions", exist_ok=True)
+    if not os.path.exists(OPTIONS_FILE):
+        template_file = os.path.join(
+            os.path.dirname(__file__), "reducer_options_template.yml"
+        )
+        shutil.copy(template_file, OPTIONS_FILE)
+        print(
+            f"Created a new config file in current directory: {OPTIONS_FILE}. Edit the config file first."
+        )
+        sys.exit(1)
+
+    if not os.path.exists(CREDENTIALS_FILE):
+        credentials_file = os.path.join(
+            os.path.dirname(__file__), "credentials_template.yml"
+        )
+        shutil.copy(credentials_file, CREDENTIALS_FILE)
+        print(
+            f"Created a new credentials file in current directory: {CREDENTIALS_FILE}. "
+            f"Edit the credentials file first."
+        )
+        sys.exit(1)
+
+
+def raster_reducer(reducer_options, cache, region_limit):
     """function that does the actual work"""
     region_type = reducer_options["region_hierarchy"][-1][0]
     raster_collection = RasterCollection(
@@ -63,7 +96,7 @@ def reduce_rasters(reducer_options, region_limit):
         region_type,
         bounding_box,
     )
-    reducer_regions = region_collection.fetch_reducer_regions()
+    reducer_regions = region_collection.fetch_reducer_regions(cache)
     reducer = Reducer(
         LIZARD_URL,
         scope_raster,
@@ -94,42 +127,15 @@ def main():
     else:
         log_level = logging.INFO
     logging.basicConfig(level=log_level, format="%(levelname)s: %(message)s")
-    if not options.limit:
-        options.limit = None
-    os.makedirs("reducer_results", exist_ok=True)
-    os.makedirs("lizard_cache/colormaps", exist_ok=True)
-    os.makedirs("lizard_cache/regions", exist_ok=True)
-    if not os.path.exists(OPTIONS_FILE):
-        template_file = os.path.join(
-            os.path.dirname(__file__), "reducer_options_template.yml"
-        )
-        shutil.copy(template_file, OPTIONS_FILE)
-        print(
-            "Created a new config file in current directory: {}. Edit the config file first.".format(
-                OPTIONS_FILE
-            )
-        )
-        sys.exit(1)
+    set_local_config()
     with open(OPTIONS_FILE, "r") as f:
         reducer_options = yaml.load(f)
-    if not os.path.exists(CREDENTIALS_FILE):
-        credentials_file = os.path.join(
-            os.path.dirname(__file__), "credentials_template.yml"
-        )
-        shutil.copy(credentials_file, CREDENTIALS_FILE)
-        print(
-            "Created a new credentials file in current directory: {}. Edit the credentials file first.".format(
-                CREDENTIALS_FILE
-            )
-        )
-        sys.exit(1)
     with open(CREDENTIALS_FILE, "r") as f:
         credentials = yaml.load(f)
     username = credentials["username"]
     password = credentials["password"]
-
     set_headers(username, password)
-    reduce_rasters(reducer_options, options.limit)
+    raster_reducer(reducer_options, options.cache, options.limit)
 
 
 if __name__ == "__main__":

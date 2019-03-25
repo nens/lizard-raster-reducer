@@ -39,7 +39,7 @@ class RegionCollection:
         if nr_of_pages > 1:
             page_numbers = list(range(2, nr_of_pages + 1))
             next_pages = [
-                next_page.replace("page=2", "page={}".format(n)) for n in page_numbers
+                next_page.replace("page=2", f"page={n}") for n in page_numbers
             ]
             responses = get_json_objects_async(next_pages)
             for response in responses:
@@ -50,14 +50,12 @@ class RegionCollection:
     def fetch_regions(self, check_local=True):
         """fetch regions. When locally available load from pickle file, else fetch from urls"""
         regions = []
-        url = "{}regions/".format(self.LIZARD_URL)
+        url = f"{self.LIZARD_URL}regions/"
         hierarchy = self.hierarchy
         type_numbers, type_names = map(list, zip(*hierarchy))
         params = {"in_bbox": self.bounding_box}
         for type_number in type_numbers:
-            regions_file = "lizard_cache/regions/regions_{}_{}.pickle".format(
-                type_number, self.bounding_box_rough
-            )
+            regions_file = f"lizard_cache/regions/regions_{type_number}_{self.bounding_box_rough}.pickle"
             if check_local:
                 features = unpickle(regions_file)
             else:
@@ -103,9 +101,9 @@ class RegionCollection:
             regional_context[type_number] = nearest_regions[0]
         return regional_context
 
-    def fetch_reducer_regions(self):
+    def fetch_reducer_regions(self, check_local):
         """get region objects that will be used to reduce rasters"""
-        raw_regions = self.fetch_regions()
+        raw_regions = self.fetch_regions(check_local)
         regional_context = self.get_regional_context(
             raw_regions, self.boundaries, self.hierarchy
         )

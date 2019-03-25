@@ -28,6 +28,7 @@ def test_set_headers():
 
 
 def test_raster_collection():
+    scripts.set_local_config()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     raster_collection = rasters.RasterCollection(
@@ -45,11 +46,12 @@ def test_raster_collection():
     )
     pickle.dump(raster_collection, open(raster_collection_file, "wb"))
 
-    assert scope_raster["name"] == "AHN2 WSS"
+    assert scope_raster["temporal"] is True
     assert len(reducer_raster_collection) == 2
 
 
 def test_region_collection():
+    scripts.set_local_config()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     region_type = reducer_options["region_hierarchy"][-1][0]
@@ -66,7 +68,7 @@ def test_region_collection():
         region_type,
         bounding_box,
     )
-    reducer_regions = region_collection.fetch_reducer_regions()
+    reducer_regions = region_collection.fetch_reducer_regions(True)
     reducer_regions_file = (
         "lizard_raster_reducer/tests/testdata/test_reducer_regions.pickle"
     )
@@ -75,6 +77,7 @@ def test_region_collection():
 
 
 def test_reducer():
+    scripts.set_local_config()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     region_type = reducer_options["region_hierarchy"][-1][0]
@@ -108,3 +111,18 @@ def test_reporter():
     aggregates = fetching.unpickle(aggregates_file)
     result = reporter.export(aggregates, "test", True, True, True)
     assert result == 1
+
+
+# TODO find out how to mimic user input for test function
+# def test_fetch_raster():
+#     raster_collection = rasters.RasterCollection(LIZARD_URL, ["Water"])
+#     raster_json = raster_collection.fetch_raster("Water", False)
+#     assert isinstance(raster_json, dict)
+
+
+def test_unpickle():
+    pickle.dump("random text", open("file.pickle", "wb"))
+    file = fetching.unpickle("file.pickle")
+    none = fetching.unpickle("non_existing.pickle")
+    assert file == "random text"
+    assert none is None
