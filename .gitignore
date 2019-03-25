@@ -39,3 +39,4 @@ reducer_results/
 reducer_options.yml
 Pipfile.lock
 *.pickle
+credentials.yml
