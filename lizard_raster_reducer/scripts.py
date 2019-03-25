@@ -50,10 +50,13 @@ def get_parser():
     return parser
 
 
-def set_local_config():
+def set_local_directories():
     os.makedirs("reducer_results", exist_ok=True)
     os.makedirs("lizard_cache/colormaps", exist_ok=True)
     os.makedirs("lizard_cache/regions", exist_ok=True)
+
+
+def set_local_config_files():
     if not os.path.exists(OPTIONS_FILE):
         template_file = os.path.join(
             os.path.dirname(__file__), "reducer_options_template.yml"
@@ -127,7 +130,8 @@ def main():
     else:
         log_level = logging.INFO
     logging.basicConfig(level=log_level, format="%(levelname)s: %(message)s")
-    set_local_config()
+    set_local_directories()
+    set_local_config_files()
     with open(OPTIONS_FILE, "r") as f:
         reducer_options = yaml.load(f)
     with open(CREDENTIALS_FILE, "r") as f:

@@ -28,7 +28,7 @@ def test_set_headers():
 
 
 def test_raster_collection():
-    scripts.set_local_config()
+    scripts.set_local_directories()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     raster_collection = rasters.RasterCollection(
@@ -51,7 +51,7 @@ def test_raster_collection():
 
 
 def test_region_collection():
-    scripts.set_local_config()
+    scripts.set_local_directories()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     region_type = reducer_options["region_hierarchy"][-1][0]
@@ -77,7 +77,7 @@ def test_region_collection():
 
 
 def test_reducer():
-    scripts.set_local_config()
+    scripts.set_local_directories()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
         reducer_options = yaml.load(ymlfile)
     region_type = reducer_options["region_hierarchy"][-1][0]
