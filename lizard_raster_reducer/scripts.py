@@ -133,9 +133,9 @@ def main():
     set_local_directories()
     set_local_config_files()
     with open(OPTIONS_FILE, "r") as f:
-        reducer_options = yaml.load(f)
+        reducer_options = yaml.load(f, Loader=yaml.SafeLoader)
     with open(CREDENTIALS_FILE, "r") as f:
-        credentials = yaml.load(f)
+        credentials = yaml.load(f, Loader=yaml.SafeLoader)
     username = credentials["username"]
     password = credentials["password"]
     set_headers(username, password)

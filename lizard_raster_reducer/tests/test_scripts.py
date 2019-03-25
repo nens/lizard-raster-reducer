@@ -18,7 +18,7 @@ def test_get_parser():
 def test_set_headers():
     """Notice that other tests rely on this function"""
     with open(scripts.CREDENTIALS_FILE, "r") as f:
-        credentials = yaml.load(f)
+        credentials = yaml.load(f, Loader=yaml.SafeLoader)
     username = credentials["username"]
     password = credentials["password"]
     fetching.set_headers(username, password)
@@ -30,7 +30,7 @@ def test_set_headers():
 def test_raster_collection():
     scripts.set_local_directories()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
-        reducer_options = yaml.load(ymlfile)
+        reducer_options = yaml.load(ymlfile, Loader=yaml.SafeLoader)
     raster_collection = rasters.RasterCollection(
         LIZARD_URL,
         reducer_options["raster_layers"],
@@ -53,7 +53,7 @@ def test_raster_collection():
 def test_region_collection():
     scripts.set_local_directories()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
-        reducer_options = yaml.load(ymlfile)
+        reducer_options = yaml.load(ymlfile, Loader=yaml.SafeLoader)
     region_type = reducer_options["region_hierarchy"][-1][0]
     bounding_box = [
         3.246545003189651,
@@ -79,7 +79,7 @@ def test_region_collection():
 def test_reducer():
     scripts.set_local_directories()
     with open("lizard_raster_reducer/tests/test_reducer_options.yml", "r") as ymlfile:
-        reducer_options = yaml.load(ymlfile)
+        reducer_options = yaml.load(ymlfile, Loader=yaml.SafeLoader)
     region_type = reducer_options["region_hierarchy"][-1][0]
     raster_collection_file = (
         "lizard_raster_reducer/tests/testdata/test_raster_collection.pickle"
