@@ -51,12 +51,14 @@ def get_parser():
 
 
 def set_local_directories():
+    """dirs for results and cache"""
     os.makedirs("reducer_results", exist_ok=True)
     os.makedirs("lizard_cache/colormaps", exist_ok=True)
     os.makedirs("lizard_cache/regions", exist_ok=True)
 
 
 def set_local_config_files():
+    """load config from yaml files"""
     if not os.path.exists(OPTIONS_FILE):
         template_file = os.path.join(
             os.path.dirname(__file__), "reducer_options_template.yml"
