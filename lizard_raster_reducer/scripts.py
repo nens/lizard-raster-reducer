@@ -59,6 +59,7 @@ def set_local_directories():
 
 def set_local_config_files():
     """load config from yaml files"""
+    config_files_set = True
     if not os.path.exists(OPTIONS_FILE):
         template_file = os.path.join(
             os.path.dirname(__file__), "reducer_options_template.yml"
@@ -67,7 +68,7 @@ def set_local_config_files():
         print(
             f"Created a new config file in current directory: {OPTIONS_FILE}. Edit the config file first."
         )
-        sys.exit(1)
+        config_files_set = False
 
     if not os.path.exists(CREDENTIALS_FILE):
         credentials_file = os.path.join(
@@ -78,6 +79,9 @@ def set_local_config_files():
             f"Created a new credentials file in current directory: {CREDENTIALS_FILE}. "
             f"Edit the credentials file first."
         )
+        config_files_set = False
+
+    if not config_files_set:
         sys.exit(1)
 
 
