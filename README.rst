@@ -18,10 +18,21 @@ When data are classes, the area fraction per class are returned.
 The output format can be specified to be CSV, JSON or HTML.
 
 
-Usage
+Installation
 ------------
 
-0. First use, run: pipenv run run-lizard-raster-reducer. This will create .yml config files from templates.
+We can be installed with::
+
+  $ pip install lizard-raster-reducer
+
+
+Create .yml configuration files from templates::
+
+  $ run-lizard-raster-reducer
+
+
+Usage
+------------
 
 1. Specify reducer options in reducer_options.yml.
 
@@ -31,16 +42,7 @@ Usage
 
 4. Run the code: pipenv run run-lizard-raster-reducer
 
-5. Find result(s) in sub-folder /reducer_results
-
-
-Installation
-------------
-
-We can be installed with::
-
-  $ pip install lizard-raster-reducer
-
+5. Find result(s) in local sub-folder /reducer_results
 
 
 Development installation of this project itself
