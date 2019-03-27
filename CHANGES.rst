@@ -2,7 +2,7 @@ Changelog of lizard-raster-reducer
 ===================================================
 
 
-0.1 (unreleased)
+0.1 (2019-03-27)
 ----------------
 
 - Initial project structure created with cookiecutter and
