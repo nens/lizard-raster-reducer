@@ -2,7 +2,7 @@ Changelog of lizard-raster-reducer
 ===================================================
 
 
-0.2 (unreleased)
+0.2 (2019-03-27)
 ----------------
 
 - First deploy to pypi.org.
