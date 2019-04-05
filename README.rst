@@ -38,9 +38,9 @@ Usage
 
 2. Specify Lizard credentials in credentials.yml
 
-3. Review optional arguments to pass: pipenv run run-lizard-raster-reducer -h
+3. Review optional arguments to pass: run-lizard-raster-reducer -h
 
-4. Run the code: pipenv run run-lizard-raster-reducer
+4. Run the code: run-lizard-raster-reducer
 
 5. Find result(s) in local sub-folder /reducer_results
 

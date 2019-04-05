@@ -109,7 +109,8 @@ def test_reducer():
 def test_reporter():
     aggregates_file = "lizard_raster_reducer/tests/testdata/test_reducer_regions.pickle"
     aggregates = fetching.unpickle(aggregates_file)
-    result = reporter.export(aggregates, "test", True, True, True)
+    alarms = [0.2, 0.4]
+    result = reporter.export(aggregates, "test", True, True, True, alarms)
     assert result == 1
 
 

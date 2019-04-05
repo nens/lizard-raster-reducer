@@ -117,6 +117,12 @@ def raster_reducer(reducer_options, cache, region_limit):
     aggregates = reducer.reduce2dictionary(
         reducer_options["region_hierarchy"], region_limit
     )
+    if reducer_options["alarms"]:
+        raster_le = reducer_options["raster_less_equal"]
+        raster_ge = reducer_options["raster_greater_equal"]
+        alarms = [raster_le, raster_ge]
+    else:
+        alarms = None
 
     export(
         aggregates,
@@ -124,6 +130,7 @@ def raster_reducer(reducer_options, cache, region_limit):
         reducer_options["export_json"],
         reducer_options["export_html"],
         reducer_options["export_csv"],
+        alarms,
     )
 
 

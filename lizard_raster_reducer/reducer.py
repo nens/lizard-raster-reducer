@@ -33,8 +33,8 @@ class RasterAggregate:
             parameter = observation_type["parameter"]
             unit = observation_type["unit"]
             raster_name = raster["name"]
-            parameter_unit = f"{parameter} ({unit})"
-            data_label = f"{raster_name} {parameter_unit}_{uuid_short}"
+            parameter_unit = f"{parameter} {unit}"
+            data_label = f"{raster_name} ({parameter_unit})_{uuid_short}"
             data[data_label] = 0
         raster_attributes["data_format"] = data
         return raster_attributes

@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
+import numpy as np
+import pandas as pd
 import pickle
 import requests
 import urllib.parse as urlparse
@@ -98,3 +100,17 @@ def flatten(items, seq_types=(list, tuple)):
         while c < len(items) and isinstance(items[c], seq_types):
             items[c : c + 1] = items[c]
     return items
+
+
+def clean_unicode(df):
+    """clean df"""
+    # Transforms the DataFrame to Numpy array
+    df_columns = list(df.columns)
+    df = df.values
+    # Encode all strings with special characters
+    for x in np.nditer(df, flags=["refs_ok"], op_flags=["copy", "readonly"]):
+        df[df == x] = str(str(x).encode("latin-1", "replace").decode("utf8"))
+    # Transform the Numpy array to Dataframe again
+    df = pd.DataFrame(df)
+    df.columns = [column.encode() for column in df_columns]
+    return df

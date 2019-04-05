@@ -2,8 +2,8 @@
 # The list elements can be raster uuids, or search queries (the best match will be used).
 # The first list element is used as scope for the spatial extent and temporal behaviour.
 raster_layers:
-    - waterdepth temporal
-    - land 
+    - InfraRed Precipitation
+    - land cover cci
 # 2. List region hierarchy.
 # This will reduce the rasters according to the indicated hierarchy.
 # The last level in the hierarchy is used for the result(s).
@@ -30,12 +30,16 @@ region_hierarchy:
 # temporal_type options: N/A, last_timesteps, range
 temporal_type: last_timesteps
 temporal_options:
-    timesteps: 5
+    timesteps: 2
     start_date: 2015-01-01
     end_date: 2016-01-01
     custom_interval: False
     interval_days: 30
-# 5. Specify export options
+# 5. Set alarm levels for scope raster
+alarms: True
+raster_less_equal: 0.4
+raster_greater_equal: 0.2
+# 6. Specify export options
 export_json: True
 export_html: True
 export_csv: True

@@ -35,7 +35,11 @@ temporal_options:
     end_date: 2016-01-01
     custom_interval: False
     interval_days: 30
-# 5. Specify export options
+# 5. Set alarm levels for scope raster
+alarms: True
+raster_less_equal: 0.4
+raster_greater_equal: 0.2
+# 6. Specify export options
 export_json: True
 export_html: True
 export_csv: True
