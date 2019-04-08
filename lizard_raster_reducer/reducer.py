@@ -168,6 +168,7 @@ class Reducer:
                 if isinstance(data, list):
                     counts_data = True
                     if None in data:
+                        data = 0
                         counts_data = False
                 else:
                     counts_data = False
@@ -186,7 +187,7 @@ class Reducer:
                                     elem["label"] = ""
                                     label = uuid_short
                                 aggregate[label] = portion
-                        else:  # average
+                        else:  # mean
                             aggregate_data = {}
                             for k, v in aggregate.items():
                                 if uuid_short in k.lower():

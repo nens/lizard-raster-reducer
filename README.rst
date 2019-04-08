@@ -30,9 +30,13 @@ Create .yml configuration files from templates::
 
   $ run-lizard-raster-reducer
 
+Usage (iPython notebook example)
+--------------------------------
 
-Usage
-------------
+`This example notebook (link) <https://github.com/nens/lizard-raster-reducer/blob/master/notebook_examples/example_use_lizard_raster_reducer.ipynb>`_ exemplifies how the Lizard raster reducer can be used.
+
+Usage (command line example)
+----------------------------
 
 1. Specify reducer options in reducer_options.yml.
 
