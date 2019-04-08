@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""TODO Docstring, used in the command line help text."""
+"""Scripts to reduce raster data to regional aggregates, set alarms and export as reports"""
 
 import argparse
 import os

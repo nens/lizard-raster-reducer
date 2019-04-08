@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-""" TODO Docstring. """
+"""Create raster collection with reducer attributes"""
 
 import logging
 import pickle

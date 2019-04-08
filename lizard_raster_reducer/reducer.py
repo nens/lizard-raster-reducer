@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Reduce and reorganize the data per region"""
 
 import logging
 

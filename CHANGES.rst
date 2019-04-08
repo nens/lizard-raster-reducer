@@ -5,7 +5,7 @@ Changelog of lizard-raster-reducer
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Functionality to set regional alarms.
 
 
 0.2 (2019-03-27)

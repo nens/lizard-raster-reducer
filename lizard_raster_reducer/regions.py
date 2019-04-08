@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Retrieve regions and region attributes for reducer"""
 
 import pickle
 import logging

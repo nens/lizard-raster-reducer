@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """reporter to export aggregates to a file"""
+
 import json
 import pandas as pd
 from lizard_raster_reducer.fetching import clean_unicode
