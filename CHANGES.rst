@@ -2,7 +2,7 @@ Changelog of lizard-raster-reducer
 ===================================================
 
 
-0.5 (unreleased)
+0.5 (2019-04-11)
 ----------------
 
 - Improved readme
