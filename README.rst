@@ -25,11 +25,6 @@ We can be installed with::
 
   $ pip install lizard-raster-reducer
 
-
-Create .yml configuration files from templates::
-
-  $ run-lizard-raster-reducer
-
 Usage (iPython notebook example)
 --------------------------------
 
@@ -37,6 +32,10 @@ Usage (iPython notebook example)
 
 Usage (command line example)
 ----------------------------
+
+Create .yml configuration files from templates::
+
+  $ run-lizard-raster-reducer
 
 1. Specify reducer options in reducer_options.yml.
 

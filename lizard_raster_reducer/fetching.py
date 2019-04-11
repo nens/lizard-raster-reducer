@@ -58,7 +58,7 @@ def parameterised_url(url, params):
 def get_json_objects_async(urls):
     """retrieve a dict with urls and corresponding jsons.
      The data is fetched asynchronously to speed up the process."""
-    pool = ThreadPool(processes=8)
+    pool = ThreadPool(processes=4)
     url_json_dicts = pool.map(request_url_json_dict_from_url, urls)
     pool.close()
     pool.join()
