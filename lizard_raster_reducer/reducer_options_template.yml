@@ -1,25 +1,24 @@
-# 1. List raster(s) to reduce. Lizard will be searched for each element.
-# The list elements can be raster uuids, or search queries (the best match will be used).
-# The first list element is used as scope for the spatial extent and temporal behaviour.
+# 1. List raster(s) to reduce. Lizard will be searched for each element (specified via indented dash).
 raster_layers:
-    - Raster name / uuid 1
-    - Raster name / uuid 2
-# 2. List region hierarchy.
-# This will reduce the rasters according to the indicated hierarchy.
-# The last level in the hierarchy is used for the result(s).
-# When multiple levels are indicated, the regional context per region will be identified.
-# E.g. when supplying [0, Country, 1, Province, 3, Municipality] the result(s) will be
-#      per municipality & indicate the province and country they are located in.
-# Boundary IDs can be chosen from Lizard boundaries below, e.g. 1 for PROVINCE.
-# Furthermore, boundary name aliases can be specified. 
-# E.g. instead of [1, PROVINCE, you can use [1, Provinsi]
+    - ea434e56-edad-4a16-a703-909bf53748d7
+    - Elevation
+#   - The first list element is used as scope for the spatial extent and temporal behaviour.
+#   - The list elements can be raster UUIDs
+#   - or search queries (the best match will be used)
+# 2. List region hierarchy. This will reduce the rasters according to the indicated hierarchy.
 region_hierarchy:
     - [0, Country]
     - [1, Province]
-# 3. Specify spatial reduce options
-# TODO add stats type option, default is now area portion per class.
-# stats_types: portions and areas, portions, areas
-# stats_type: portions
+#   - The last level in the hierarchy is used for the result(s).
+#   - When multiple levels are indicated, the regional context per region will be identified.
+#   - E.g. when supplying [0, Country, 1, Province, 3, Municipality] the result(s) will be
+#     per municipality & indicate the province and country they are located in.
+#   - Boundary IDs can be chosen from Lizard boundaries below, e.g. 1 for PROVINCE.
+#   - Furthermore, boundary name aliases can be specified. 
+#   - E.g. instead of [1, PROVINCE, you can use [1, Provinsi]
+# 3. Specify spatial reduce options)
+stats_type: areas
+# stats_type options: areas, portions (default)
 # TODO add other spatial aggregation options.
 # Defaults are now mean for continuous and counts for classes.
 # reduce: mean
@@ -27,8 +26,8 @@ region_hierarchy:
 # i.e. scale coverage fractions to sum to 1
 # normalize: False
 # 4. Specify temporal reducer options
-# temporal_type options: N/A, last_timesteps, range
 temporal_type: last_timesteps
+# temporal_type options: range, last_timesteps (default)
 temporal_options:
     timesteps: 5
     start_date: 2015-01-01

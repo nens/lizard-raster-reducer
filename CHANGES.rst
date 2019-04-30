@@ -2,10 +2,10 @@ Changelog of lizard-raster-reducer
 ===================================================
 
 
-0.6 (unreleased)
+0.6 (2019-04-30)
 ----------------
 
-- Nothing changed yet.
+- Options for hectares (besides fraction) and temporal range (besides last timesteps)
 
 
 0.5 (2019-04-11)

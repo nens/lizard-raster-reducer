@@ -112,6 +112,7 @@ def raster_reducer(reducer_options, cache, region_limit):
         reducer_raster_collection,
         reducer_regions,
         region_type,
+        reducer_options["stats_type"],
     )
 
     aggregates = reducer.reduce2dictionary(

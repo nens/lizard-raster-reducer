@@ -97,6 +97,7 @@ def test_reducer():
         reducer_raster_collection,
         reducer_regions,
         region_type,
+        reducer_options["stats_type"],
     )
     aggregates = reducer_test.reduce2dictionary(
         reducer_options["region_hierarchy"], region_limit=5

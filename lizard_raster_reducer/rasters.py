@@ -85,6 +85,20 @@ class RasterCollection:
         timesteps_ms = []
         first_ms = int(raster["first_value_timestamp"])
         last_ms = int(raster["last_value_timestamp"])
+        if self.temporal_type == "range":
+            range_start_date = dt.combine(
+                self.temporal_options["start_date"], dt.min.time()
+            )
+            range_end_date = dt.combine(
+                self.temporal_options["end_date"], dt.min.time()
+            )
+            # range_end_date = self.temporal_options["end_date"]
+            first_ms_in_range = int(dt.timestamp(range_start_date) * 1000)
+            last_ms_in_range = int(dt.timestamp(range_end_date) * 1000)
+            if first_ms_in_range > first_ms:
+                first_ms = first_ms_in_range
+            if last_ms_in_range <= last_ms:
+                last_ms = last_ms_in_range
         if self.temporal_options["custom_interval"]:
             interval_ms = self.temporal_options["interval_days"] * 3_600_000 * 24
         else:
@@ -92,8 +106,9 @@ class RasterCollection:
         while first_ms < last_ms:
             timesteps_ms.append(last_ms)
             last_ms -= interval_ms
-        if not first_ms in timesteps_ms:
-            timesteps_ms.append(first_ms)
+        if first_ms not in timesteps_ms:
+            if not self.temporal_options["custom_interval"]:
+                timesteps_ms.append(first_ms)
         dates = [dt.fromtimestamp(i / 1000.0).isoformat() for i in timesteps_ms]
         return dates
 
@@ -179,8 +194,8 @@ class RasterCollection:
             timesteps = self.temporal_options["timesteps"]
             reducer_dates = dates[:timesteps]
         elif self.temporal_type == "range":
-            start_date = self.temporal_options["timesteps"]["start_date"]
-            end_date = self.temporal_options["timesteps"]["end_date"]
+            start_date = self.temporal_options["start_date"].isoformat()
+            end_date = self.temporal_options["end_date"].isoformat()
             reducer_dates = [date for date in dates if start_date <= date <= end_date]
         else:  # N/A, non-temporal
             reducer_dates = ["2019-01-01"]
