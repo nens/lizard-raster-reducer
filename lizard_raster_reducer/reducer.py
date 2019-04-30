@@ -78,13 +78,14 @@ class Reducer:
     """
 
     def __init__(
-        self, LIZARD_URL, scope_raster, raster_collection, regions, reducer_region_type
+        self, LIZARD_URL, scope_raster, raster_collection, regions, reducer_region_type, reducer_stats_type
     ):
         self.LIZARD_URL = LIZARD_URL
         self.scope_raster = scope_raster
         self.raster_collection = raster_collection
         self.regions = regions
         self.reducer_region_type = reducer_region_type
+        self.reducer_stats_type = reducer_stats_type
 
     def aggregation_params(self, region, raster, date):
         """get aggregation parameters from region raster and date"""
@@ -182,11 +183,17 @@ class Reducer:
                                 if "label" in elem:
                                     elem_label = elem["label"]
                                     label = f"{elem_label}_{uuid_short}"
-                                    portion = elem["data"] / elem["total"]
+                                    portion = round(elem["data"] / elem["total"], 3)
+                                    area = round(aggregate["Area (ha)"] * portion, 1)
                                 else:
                                     elem["label"] = ""
                                     label = uuid_short
-                                aggregate[label] = portion
+                                    portion = 0
+                                    area = 0
+                                if self.reducer_stats_type == "areas":
+                                    aggregate[label] = area
+                                else:
+                                    aggregate[label] = portion
                         else:  # mean
                             aggregate_data = {}
                             for k, v in aggregate.items():
