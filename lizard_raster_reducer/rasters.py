@@ -86,8 +86,12 @@ class RasterCollection:
         first_ms = int(raster["first_value_timestamp"])
         last_ms = int(raster["last_value_timestamp"])
         if self.temporal_type == "range":
-            range_start_date = dt.combine(self.temporal_options["start_date"], dt.min.time())
-            range_end_date = dt.combine(self.temporal_options["end_date"], dt.min.time())
+            range_start_date = dt.combine(
+                self.temporal_options["start_date"], dt.min.time()
+            )
+            range_end_date = dt.combine(
+                self.temporal_options["end_date"], dt.min.time()
+            )
             # range_end_date = self.temporal_options["end_date"]
             first_ms_in_range = int(dt.timestamp(range_start_date) * 1000)
             last_ms_in_range = int(dt.timestamp(range_end_date) * 1000)

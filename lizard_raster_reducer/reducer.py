@@ -78,7 +78,13 @@ class Reducer:
     """
 
     def __init__(
-        self, LIZARD_URL, scope_raster, raster_collection, regions, reducer_region_type, reducer_stats_type
+        self,
+        LIZARD_URL,
+        scope_raster,
+        raster_collection,
+        regions,
+        reducer_region_type,
+        reducer_stats_type,
     ):
         self.LIZARD_URL = LIZARD_URL
         self.scope_raster = scope_raster
