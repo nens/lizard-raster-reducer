@@ -4,7 +4,7 @@ version = "0.7.dev0"
 
 long_description = "\n\n".join([open("README.rst").read(), open("CHANGES.rst").read()])
 
-install_requires = ["pandas", "requests", "datetime", "pyyaml"]
+install_requires = ["pandas", "requests", "datetime", "pyyaml", "shapely"]
 
 tests_require = [
     "pytest",

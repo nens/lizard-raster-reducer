@@ -42,27 +42,29 @@ class RasterAggregate:
 
     def get_region_attributes(self, region):
         """get reducer formatted region attributes"""
-        region_attributes = {"Area (ha)": region["area"]}
+        region_attributes = {"Area ha": region["area"]}
         if "type_nr" in region:
             for region_type_name, type_nr in self.reducer_hierarchy.items():
                 if region["type_nr"] == type_nr:
-                    type_name = f"Region {region_type_name}"
+                    # type_name = f"Region {region_type_name}"
+                    type_name = region_type_name
                     region_attributes[type_name] = region["name"]
             if "regional_context" in region:
                 regional_context = region["regional_context"]
                 if regional_context:
-                    level = 1
+                    # level = 1
                     for region_type_name, type_nr in self.reducer_hierarchy.items():
                         for context_type, context_region in regional_context.items():
                             if context_type == type_nr:
-                                if len(regional_context.items()) == 1:
-                                    type_name = f"Region context {region_type_name}"
-                                else:
-                                    type_name = (
-                                        f"Region context ({level}) {region_type_name}"
-                                    )
+                                type_name = region_type_name
+                                # if len(regional_context.items()) == 1:
+                                #     type_name = f"Region context {region_type_name}"
+                                # else:
+                                #     type_name = (
+                                #         f"Region context ({level}) {region_type_name}"
+                                #     )
                                 region_attributes[type_name] = context_region["name"]
-                                level += 1
+                                # level += 1
         return region_attributes
 
     def get_data_form(self, datetime, url, raster_attributes):
@@ -171,41 +173,42 @@ class Reducer:
         """fill data template with data"""
         for raster_aggregate in raster_aggregates:
             for url, json_dict in raster_aggregate.items():
-                data = json_dict["data"]
-                if isinstance(data, list):
-                    counts_data = True
-                    if None in data:
-                        data = 0
+                if "data" in json_dict:
+                    data = json_dict["data"]
+                    if isinstance(data, list):
+                        counts_data = True
+                        if None in data:
+                            data = 0
+                            counts_data = False
+                    else:
                         counts_data = False
-                else:
-                    counts_data = False
-                for aggregate in aggregates_form:
-                    if url == aggregate["url"]:
-                        uuid_short = (
-                            url.partition("rasters=")[2].split("&")[0].split("-")[0]
-                        )
-                        if "counts" in url and counts_data:
-                            for elem in data:
-                                if "label" in elem:
-                                    elem_label = elem["label"]
-                                    label = f"{elem_label}_{uuid_short}"
-                                    portion = round(elem["data"] / elem["total"], 3)
-                                    area = round(aggregate["Area (ha)"] * portion, 1)
-                                else:
-                                    elem["label"] = ""
-                                    label = uuid_short
-                                    portion = 0
-                                    area = 0
-                                if self.reducer_stats_type == "areas":
-                                    aggregate[label] = area
-                                else:
-                                    aggregate[label] = portion
-                        else:  # mean
-                            aggregate_data = {}
-                            for k, v in aggregate.items():
-                                if uuid_short in k.lower():
-                                    aggregate_data[k] = data
-                            aggregate.update(aggregate_data)
+                    for aggregate in aggregates_form:
+                        if url == aggregate["url"]:
+                            uuid_short = (
+                                url.partition("rasters=")[2].split("&")[0].split("-")[0]
+                            )
+                            if "counts" in url and counts_data:
+                                for elem in data:
+                                    if "label" in elem:
+                                        elem_label = elem["label"]
+                                        label = f"{elem_label}_{uuid_short}"
+                                        portion = round(elem["data"] / elem["total"], 3)
+                                        area = round(aggregate["Area ha"] * portion, 1)
+                                    else:
+                                        elem["label"] = ""
+                                        label = uuid_short
+                                        portion = 0
+                                        area = 0
+                                    if self.reducer_stats_type == "areas":
+                                        aggregate[label] = area
+                                    else:
+                                        aggregate[label] = portion
+                            else:  # mean
+                                aggregate_data = {}
+                                for k, v in aggregate.items():
+                                    if uuid_short in k.lower():
+                                        aggregate_data[k] = data
+                                aggregate.update(aggregate_data)
         aggregates = aggregates_form
         return aggregates
 

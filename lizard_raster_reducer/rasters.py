@@ -82,6 +82,8 @@ class RasterCollection:
         """
         if not raster["temporal"]:
             return ["1970-01-01"]
+        if raster["first_value_timestamp"] is None:
+            return ["1970-01-01"]
         timesteps_ms = []
         first_ms = int(raster["first_value_timestamp"])
         last_ms = int(raster["last_value_timestamp"])

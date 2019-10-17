@@ -41,8 +41,12 @@ def request_url_json_dict_from_url(url, params={}):
     """retrieve dict with url and fetched json object from url"""
     params["format"] = "json"
     r = requests.get(url=url, params=params, headers=get_headers())
-    r.raise_for_status()
-    return {url: r.json()}
+    if r.status_code == requests.codes.ok:
+        return {url: r.json()}
+    else:
+        return {url: {}}
+    # r.raise_for_status()
+    # return {url: r.json()}
 
 
 def parameterised_url(url, params):
@@ -91,7 +95,8 @@ def get_json_objects_async(urls):
 def unpickle(file):
     """load pickle file from cache"""
     if os.path.isfile(file):
-        return pickle.load(open(file, "rb"))
+        if os.path.getsize(file) > 0:
+            return pickle.load(open(file, "rb"))
     else:
         return None
 

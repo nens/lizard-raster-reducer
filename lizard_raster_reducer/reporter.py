@@ -3,6 +3,7 @@
 
 import json
 import pandas as pd
+import re
 from lizard_raster_reducer.fetching import clean_unicode
 
 pd.set_option("display.max_colwidth", -1)
@@ -16,8 +17,8 @@ def fill_alarm_reports(alarm_columns, df, date_times):
         for date_time in date_times:
             column_name = f"{alarm_column}_{date_time}"
             df_date = df.loc[df["datetime"] == date_time]
-            total_area = round(sum(df_date["Area (ha)"]), 1)
-            alarm_area = round(sum(df_date["Area (ha)"][df_date[alarm_column]]), 1)
+            total_area = round(sum(df_date["Area ha"]), 1)
+            alarm_area = round(sum(df_date["Area ha"][df_date[alarm_column]]), 1)
             alarm_area_fraction = round(alarm_area / total_area, 2)
             report_fraction[column_name] = [alarm_area_fraction]
             region_count_alarm = sum(df_date[alarm_column])
@@ -84,14 +85,30 @@ def add_region_alarms(df, alarms):
 def slim_aggregates(aggregates):
     """"slim version of the region aggregates, minimizing NoData and verbose naming"""
     slimmed_aggregates = []
+    keys_to_drop = ["url", "Raster", "Other land", "-1", "Non-vegetation"]
     for aggregate in aggregates:
         verbose_keys = list(aggregate.keys())
         for verbose_key in verbose_keys:
-            slim_key = verbose_key.split("_")[0]
+            key_without_parentheses = re.sub("[\(\[].*?[\)\]]", "", verbose_key)
+            key_without_parentheses_before_underscore = key_without_parentheses.split("_")[0]
+            slim_key = key_without_parentheses_before_underscore.strip()
             aggregate[slim_key] = aggregate.pop(verbose_key)
+            if isinstance(aggregate[slim_key], str):
+                aggregate[slim_key] = re.sub("[\(\[].*?[\)\]]", "", aggregate[slim_key])
+            if isinstance(aggregate[slim_key], float):
+                aggregate[slim_key] = round(aggregate[slim_key], 2)
+            # clean up unnecessary keys
+            for key in keys_to_drop:
+                if key in slim_key:
+                    aggregate.pop(slim_key)
         datetime = aggregate["datetime"]
-        aggregate["Date"] = datetime.split("T")[0] + "Z"
+        # aggregate["Date"] = datetime.split("T")[0] + "Z"
+        yyyy_mm_dd = datetime.split("T")[0]
+        # mm_dd = "-".join(yyyy_mm_dd.split('-')[1:3])
+        aggregate["Date"] = "-".join(reversed(yyyy_mm_dd.split("-")))
         aggregate.pop("datetime", None)
+        if "1970" in aggregate["Date"]:
+            aggregate.pop("Date", None)
         slimmed_aggregates.append(aggregate)
     return slimmed_aggregates
 
